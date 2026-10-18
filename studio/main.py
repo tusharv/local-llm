@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
+from studio.pulls import PullManager
 from studio.db import init_db
-from studio.routes import benchmarks, chat, endpoints, health, models
+from studio.routes import archives, benchmarks, chat, endpoints, health, models
 
 
 def create_app(data_dir: Path | None = None) -> FastAPI:
@@ -20,9 +21,11 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app.state.data_dir = root
     app.state.uploads_dir = uploads
     app.state.db_path = db_path
+    app.state.pulls = PullManager(db_path)
     app.include_router(health.router)
     app.include_router(endpoints.router)
     app.include_router(models.router)
+    app.include_router(archives.router)
     app.include_router(chat.router)
     app.include_router(benchmarks.router)
 

@@ -98,6 +98,27 @@ def pull_model(body: PullIn, request: Request):
     return StreamingResponse(generate(), media_type="text/event-stream")
 
 
+@router.get("/api/model-pulls")
+def pull_status(endpoint_id: int, request: Request):
+    return {"job": request.app.state.pulls.get(endpoint_id)}
+
+
+@router.post("/api/model-pulls", status_code=202)
+def start_pull(body: PullIn, request: Request):
+    with connect(request.app.state.db_path) as conn:
+        endpoint = get_endpoint(conn, body.endpoint_id)
+    if not endpoint:
+        return error("Endpoint not found.", 404)
+    if endpoint["kind"] != "ollama":
+        return error("Downloads are only available for Ollama servers.", 400)
+    if not body.name.strip():
+        return error("A model name is required.", 400)
+    try:
+        return {"job": request.app.state.pulls.start(endpoint, body.name.strip())}
+    except ValueError as exc:
+        return error(str(exc), 409)
+
+
 @router.delete("/api/models/{model_name:path}")
 def remove_model(model_name: str, endpoint_id: int, request: Request):
     with connect(request.app.state.db_path) as conn:

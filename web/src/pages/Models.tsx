@@ -1,14 +1,17 @@
+import { ServerRecovery } from "../components/ServerRecovery";
+import { ModelDownload } from "../components/ModelDownload";
+import { IconCpu, IconEye, IconTrash, IconRefresh } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { api, selectEndpoint, selectedEndpointId, streamSse, type Endpoint, type ModelRow } from "../api";
+import { api, selectEndpoint, selectedEndpointId, type Endpoint, type ModelRow } from "../api";
 
 export function Models() {
   const [endpoints, setEndpoints] = useState<Endpoint[]>([]);
   const [endpointId, setEndpointId] = useState<number | null>(selectedEndpointId());
+  const [loading, setLoading] = useState(true);
   const [models, setModels] = useState<ModelRow[]>([]);
-  const [pullName, setPullName] = useState("");
-  const [progress, setProgress] = useState("");
   const [check, setCheck] = useState("");
   const [error, setError] = useState("");
+  const [connectionError, setConnectionError] = useState("");
 
   const endpoint = endpoints.find((item) => item.id === endpointId) ?? null;
 
@@ -17,11 +20,20 @@ export function Models() {
     setEndpoints(data.endpoints);
     const chosen = data.endpoints.find((item) => item.id === selectedEndpointId()) ?? data.endpoints[0];
     if (chosen) setEndpointId(chosen.id);
+    else setLoading(false);
   }
 
   async function loadModels(id: number) {
-    const data = await api<{ models: ModelRow[] }>(`/api/models?endpoint_id=${id}`);
-    setModels(data.models);
+    setLoading(true);
+    setError("");
+    setModels([]);
+    setConnectionError("");
+    try {
+      const data = await api<{ models: ModelRow[] }>(`/api/models?endpoint_id=${id}`);
+      setModels(data.models);
+    } catch (reason) {
+      setConnectionError(reason instanceof Error ? reason.message : "Could not load models.");
+    } finally { setLoading(false); }
   }
 
   useEffect(() => {
@@ -46,21 +58,6 @@ export function Models() {
     await loadModels(endpointId);
   }
 
-  async function pull() {
-    if (!endpointId) return;
-    setError("");
-    setProgress("");
-    try {
-      await streamSse(
-        "/api/models/pull",
-        { method: "POST", body: JSON.stringify({ endpoint_id: endpointId, name: pullName }) },
-        (event) => setProgress(JSON.stringify(event)),
-      );
-      await loadModels(endpointId);
-    } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Pull failed.");
-    }
-  }
 
   async function remove(model: string) {
     if (!endpointId) return;
@@ -92,7 +89,7 @@ export function Models() {
   return (
     <div className="stack">
       <div className="page-head">
-        <h1>Models</h1>
+        <div><h1>Models</h1><p className="page-description">Meet your models. See what they can do and make room for what’s next.</p></div>
         <label>
           Server
           <select
@@ -107,29 +104,29 @@ export function Models() {
           </select>
         </label>
       </div>
+      <div className="row"><span className="count-badge"><IconCpu size={17} /> {models.length} installed models</span><button type="button" className="secondary" disabled={!endpointId} onClick={() => endpointId && loadModels(endpointId).catch((reason: Error) => setError(reason.message))}><IconRefresh size={16} /> Refresh models</button></div>
       {endpoint?.kind === "openai" ? (
         <p>Pull and delete are not available for this server. Load the model in that runtime, then refresh.</p>
       ) : null}
       {endpoint?.kind === "ollama" ? (
-        <div className="card row">
-          <label>Pull<input value={pullName} onChange={(event) => setPullName(event.target.value)} placeholder="llama3.2:3b" /></label>
-          <button type="button" onClick={pull} disabled={!pullName.trim()}>Pull</button>
-          {progress ? <span className="mono">{progress}</span> : null}
-        </div>
+        <div className="card"><ModelDownload key={endpoint.id} endpointId={endpoint.id} onComplete={() => loadModels(endpoint.id)} /></div>
       ) : null}
       {error ? <p className="fault">{error}</p> : null}
+      {connectionError && endpoint ? <ServerRecovery endpoint={endpoint} error={connectionError} onRetry={() => loadModels(endpoint.id)} /> : null}
       {check ? <p>{check}</p> : null}
-      <table>
+      {loading ? <p role="status" className="quiet">Loading your models…</p> : null}
+      {!loading && !error && !connectionError && models.length === 0 ? <div className="empty-state"><IconCpu size={34} /><h2>No models to show yet</h2><p>{endpoint ? "Load a model in your server, then refresh this list." : "Connect a local server in Setup to see its models."}</p><a className="button secondary" href="#/setup">Open Setup</a></div> : null}
+      {models.length > 0 ? <div className="table-scroll"><table>
         <thead>
-          <tr><th>Model</th><th>Sees images</th><th>Source</th><th></th></tr>
+          <tr><th>Model</th><th>Sees images</th><th>Source</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {models.map((model) => (
             <tr key={model.id}>
               <td className="mono">{model.id}</td>
-              <td>{model.vision ? "Yes" : "No"}</td>
+              <td><span className={`capability ${model.vision ? "vision" : ""}`}>{model.vision ? <IconEye size={15} /> : <IconCpu size={15} />}{model.vision ? "Text + images" : "Text only"}</span></td>
               <td>{model.vision_source}</td>
-              <td className="row">
+              <td><div className="table-actions">
                 <select
                   value={model.vision_source === "override" ? (model.vision ? "on" : "off") : "auto"}
                   onChange={(event) => setOverride(model.id, event.target.value)}
@@ -139,15 +136,15 @@ export function Models() {
                   <option value="on">Can see images</option>
                   <option value="off">Text only</option>
                 </select>
-                <button type="button" className="secondary" onClick={() => visionCheck(model.id)}>Vision check</button>
+                <button type="button" className="secondary" onClick={() => visionCheck(model.id)}><IconEye size={16} /> Vision check</button>
                 {endpoint?.kind === "ollama" ? (
-                  <button type="button" className="danger" onClick={() => remove(model.id)}>Delete</button>
+                  <button type="button" className="danger" onClick={() => remove(model.id)}><IconTrash size={16} /> Delete</button>
                 ) : null}
-              </td>
+              </div></td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </table></div> : null}
     </div>
   );
 }

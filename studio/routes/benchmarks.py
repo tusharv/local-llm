@@ -1,4 +1,6 @@
 import json
+from typing import Literal
+from pathlib import Path
 
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -6,6 +8,7 @@ from pydantic import BaseModel
 
 from studio.benchmarks.runner import BenchmarkBusy, iter_run, start_run_row
 from studio.benchmarks.suite import SUITE_VERSION
+from studio.benchmarks.report import summarize
 from studio.db import connect, get_benchmark_run, get_endpoint, get_model_flag, list_benchmark_runs
 from studio.engines.ollama import effective_vision
 from studio.routes import error
@@ -18,12 +21,16 @@ class BenchmarkIn(BaseModel):
     model: str
     warmup: bool = True
     repeat_count: int = 1
+    profile: Literal["standard", "code", "image"] = "standard"
 
 
 @router.get("/api/benchmarks")
 def get_benchmarks(request: Request):
     with connect(request.app.state.db_path) as conn:
         runs = list_benchmark_runs(conn)
+        for run in runs:
+            detail = get_benchmark_run(conn, run["id"])
+            run["summary"] = summarize(run, detail["results"])
     return {"runs": runs, "suite_version": SUITE_VERSION}
 
 
@@ -55,6 +62,7 @@ def post_benchmark(body: BenchmarkIn, request: Request):
         if endpoint is None:
             return error("Endpoint not found.", 404)
         flag = get_model_flag(conn, endpoint["id"], model)
+    vision, _source = effective_vision(endpoint, model, flag) if body.profile == "standard" else (False, "unused")
     try:
         run = start_run_row(
             request.app.state.db_path,
@@ -62,10 +70,10 @@ def post_benchmark(body: BenchmarkIn, request: Request):
             model,
             body.warmup,
             body.repeat_count,
+            body.profile,
         )
     except BenchmarkBusy as exc:
         return error(str(exc), 409)
-    vision, _source = effective_vision(endpoint, model, flag)
 
     def generate():
         for event in iter_run(
@@ -76,6 +84,7 @@ def post_benchmark(body: BenchmarkIn, request: Request):
             warmup=body.warmup,
             repeat_count=body.repeat_count,
             run_id=run["id"],
+            profile=body.profile,
         ):
             yield "data: " + json.dumps(event) + "\n\n"
 
@@ -87,4 +96,8 @@ def _run_payload(request: Request, run_id: int):
         run = get_benchmark_run(conn, run_id)
     if run is None:
         return error("Benchmark run not found.", 404)
-    return {"run": {key: value for key, value in run.items() if key != "results"}, "results": run["results"]}
+    results = run.pop("results")
+    for result in results:
+        path = result.pop("image_path", None)
+        result["image_url"] = f"/uploads/{path}" if path and Path(path).name == path else None
+    return {"run": run, "results": results, "summary": summarize(run, results)}

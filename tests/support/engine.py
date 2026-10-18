@@ -17,6 +17,8 @@ class EngineState:
         self.show_calls: list[str] = []
         self.pulls: list[str] = []
         self.deleted: list[str] = []
+        self.image_payload = None
+        self.image_requests: list[dict] = []
 
 
 def start_engine(state: EngineState) -> tuple[str, ThreadingHTTPServer]:
@@ -36,6 +38,10 @@ def start_engine(state: EngineState) -> tuple[str, ThreadingHTTPServer]:
         def do_POST(self) -> None:
             path = self.path.split("?", 1)[0]
             body = self._body()
+            if path.endswith("/images/generations"):
+                state.image_requests.append(body)
+                self._json(200, state.image_payload) if state.image_payload is not None else self._json(404, {"error": "not supported"})
+                return
             if path.endswith("/chat/completions"):
                 state.chat_requests.append(body)
                 if state.chat_error:

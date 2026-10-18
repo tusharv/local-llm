@@ -1,3 +1,4 @@
+import uuid
 import sqlite3
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS benchmark_result (
     id INTEGER PRIMARY KEY,
     run_id INTEGER NOT NULL REFERENCES benchmark_run(id) ON DELETE CASCADE,
     case_id TEXT NOT NULL,
-    kind TEXT NOT NULL CHECK (kind IN ('text', 'vision')),
+    kind TEXT NOT NULL CHECK (kind IN ('text', 'vision', 'code', 'image')),
     repeat_index INTEGER NOT NULL,
     ttft_ms INTEGER,
     prompt_tokens INTEGER,
@@ -69,6 +70,9 @@ CREATE TABLE IF NOT EXISTS benchmark_result (
     tokens_per_second REAL,
     total_ms INTEGER,
     output_preview TEXT,
+    output_text TEXT,
+    image_path TEXT,
+    token_basis TEXT,
     error TEXT
 );
 """
@@ -82,9 +86,29 @@ def init_db(db_path: Path) -> None:
     db_path.parent.mkdir(parents=True, exist_ok=True)
     with connect(db_path) as conn:
         conn.executescript(SCHEMA)
+        if "public_id" not in {row[1] for row in conn.execute("PRAGMA table_info(conversation)")}:
+            conn.execute("ALTER TABLE conversation ADD COLUMN public_id TEXT")
+        for row in conn.execute("SELECT id FROM conversation WHERE public_id IS NULL").fetchall():
+            conn.execute("UPDATE conversation SET public_id=? WHERE id=?", (uuid.uuid4().hex, row[0]))
+        conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS conversation_public_id ON conversation(public_id)")
         columns = {row[1] for row in conn.execute("PRAGMA table_info(message)")}
         if "thinking" not in columns:
             conn.execute("ALTER TABLE message ADD COLUMN thinking TEXT")
+        run_columns = {row[1] for row in conn.execute("PRAGMA table_info(benchmark_run)")}
+        for name, definition in {"profile": "TEXT NOT NULL DEFAULT 'standard'", "expected_results": "INTEGER NOT NULL DEFAULT 0", "error": "TEXT"}.items():
+            if name not in run_columns:
+                conn.execute(f"ALTER TABLE benchmark_run ADD COLUMN {name} {definition}")
+        result_sql = conn.execute("SELECT sql FROM sqlite_master WHERE name = 'benchmark_result'").fetchone()[0]
+        if "'code'" not in result_sql:
+            # Rebuild the CHECK constraint transactionally, retaining IDs and every legacy row.
+            definition = SCHEMA[SCHEMA.index("CREATE TABLE IF NOT EXISTS benchmark_result"):]
+            conn.execute(definition.replace("benchmark_result (", "benchmark_result_new (", 1))
+            columns = [row[1] for row in conn.execute("PRAGMA table_info(benchmark_result)")]
+            names = ", ".join(columns)
+            conn.execute(f"INSERT INTO benchmark_result_new ({names}) SELECT {names} FROM benchmark_result")
+            conn.execute("DROP TABLE benchmark_result")
+            conn.execute("ALTER TABLE benchmark_result_new RENAME TO benchmark_result")
+
 
 
 @contextmanager
@@ -163,13 +187,14 @@ def create_conversation(
         """,
         (endpoint_id, model, title, now, now),
     )
+    conn.execute("UPDATE conversation SET public_id=? WHERE id=?", (uuid.uuid4().hex, cur.lastrowid))
     return get_conversation(conn, int(cur.lastrowid)) or {}
 
 
 def list_conversations(conn: sqlite3.Connection) -> list[dict]:
     rows = conn.execute(
         """
-        SELECT id, title, endpoint_id, model, updated_at
+        SELECT id, public_id, title, endpoint_id, model, updated_at
         FROM conversation
         ORDER BY updated_at DESC, id DESC
         """
@@ -309,6 +334,7 @@ def create_benchmark_run(
     warmup: bool,
     repeat_count: int,
     status: str = "running",
+    profile: str = "standard",
 ) -> dict:
     now = now_iso()
     cur = conn.execute(
@@ -329,6 +355,7 @@ def create_benchmark_run(
             now,
         ),
     )
+    conn.execute("UPDATE benchmark_run SET profile = ? WHERE id = ?", (profile, cur.lastrowid))
     return get_benchmark_run(conn, int(cur.lastrowid)) or {}
 
 
@@ -344,8 +371,8 @@ def add_benchmark_result(conn: sqlite3.Connection, *, run_id: int, row: dict) ->
         """
         INSERT INTO benchmark_result (
             run_id, case_id, kind, repeat_index, ttft_ms, prompt_tokens, output_tokens,
-            tokens_per_second, total_ms, output_preview, error
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            tokens_per_second, total_ms, output_preview, error, output_text, image_path, token_basis
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             run_id,
@@ -359,6 +386,9 @@ def add_benchmark_result(conn: sqlite3.Connection, *, run_id: int, row: dict) ->
             row.get("total_ms"),
             row.get("output_preview"),
             row.get("error"),
+            row.get("output_text"),
+            row.get("image_path"),
+            row.get("token_basis"),
         ),
     )
     stored = conn.execute("SELECT * FROM benchmark_result WHERE id = ?", (cur.lastrowid,)).fetchone()
@@ -411,4 +441,7 @@ def _public_run(row: dict) -> dict:
         "status": row["status"],
         "started_at": row["started_at"],
         "finished_at": row["finished_at"],
+        "profile": row.get("profile", "standard"),
+        "expected_results": row.get("expected_results", 0),
+        "error": row.get("error"),
     }

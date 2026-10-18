@@ -23,6 +23,7 @@ class Speed:
     total_ms: int
     text: str
     error: str | None
+    token_basis: str = "unknown"
 
 
 @dataclass
@@ -99,6 +100,7 @@ def compute_speed(
         total_ms=total_ms,
         text=text,
         error=resolved_error,
+        token_basis="tokens" if usage is not None and usage.get("completion_tokens") is not None else "chunks",
     )
 
 

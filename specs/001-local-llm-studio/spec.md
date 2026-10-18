@@ -183,3 +183,7 @@ A person who has never run a local model follows the guide for their operating s
 - Development click-through happens on the current Apple M1 with 16 GB of RAM and Ollama 0.40.2. Windows and Linux confidence comes from the test matrix and the guide.
 - License is MIT.
 - Quality judging, RAG, voice, multi-user accounts, image generation, and concurrency benchmarks are out of v1.
+
+## Approved benchmark extension (2026-10-19)
+
+The user approved extending benchmarks beyond the original v1 scope to include code generation, optional local image generation, and infographic-style reports. Image generation is available only through a saved local/private OpenAI-compatible image server; no public cloud endpoint support is added. Code is previewed without execution. Existing v1 measurements remain readable, and suite v2 uses separate compatibility keys. The original exclusion of image generation is superseded for this optional benchmark profile only.

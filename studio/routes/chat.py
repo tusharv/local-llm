@@ -50,9 +50,14 @@ async def post_conversation(request: Request):
 
 
 @router.get("/api/conversations/{conversation_id}")
-def get_one_conversation(conversation_id: int, request: Request):
+def get_one_conversation(conversation_id: str, request: Request):
     with connect(request.app.state.db_path) as conn:
-        row = get_conversation(conn, conversation_id)
+        if conversation_id.isdecimal():
+            internal_id = int(conversation_id)
+        else:
+            found = conn.execute("SELECT id FROM conversation WHERE public_id=?", (conversation_id,)).fetchone()
+            internal_id = found[0] if found else -1
+        row = get_conversation(conn, internal_id)
     if row is None:
         return error("Conversation not found.", 404)
     row["messages"] = [_present_message(message) for message in row["messages"]]

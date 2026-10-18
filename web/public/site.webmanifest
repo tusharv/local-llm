@@ -1,0 +1,13 @@
+{
+  "name": "Local LLM Studio",
+  "short_name": "Studio",
+  "description": "Chat with local models, explore image support, and compare model speed in your own workspace.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f6f7",
+  "theme_color": "#293c44",
+  "icons": [
+    { "src": "/brand/icon-192-v3.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/brand/icon-512-v3.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

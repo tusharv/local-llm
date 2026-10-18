@@ -213,3 +213,21 @@ Tests use a temporary directory and a mocked HTTP server. They do not download a
 ## License
 
 MIT. See `LICENSE`.
+
+## Visual benchmark reports
+
+Benchmarks now offers three suite-v2 profiles:
+
+- **General suite:** quick response, explanation, reasoning, Python, JavaScript, and an image-understanding task when the model supports vision.
+- **Code generation:** two fixed Python and JavaScript prompts. Generated code is displayed as text, never executed or graded.
+- **Image generation:** one fixed product-photo prompt requesting a 512 × 512 image. Choose a saved local image server and its image model. The server must implement `POST /v1/images/generations` and return PNG, JPEG, or WebP in `data[0].b64_json`. Image URLs are not fetched. Unsupported endpoints produce a failed report with an explanation.
+
+Each profile supports one or three repetitions. Warmup is excluded from measurements; image warmup is off by default because it generates an extra image. Image requests have a 180-second response timeout and an 8 MB decoded image limit. Generated images stay under `data/uploads`.
+
+Reports show median response time, effective throughput, completion counts, per-task charts, and output previews. Effective throughput is output tokens divided by **the full request duration**, including the initial wait. If token usage is absent, streamed chunks are used and labeled as estimates. Images report total time instead of tokens per second. Completion means a response was returned, not that the code or image is correct.
+
+Choose a previous compatible run to compare response time. Compatibility requires the same suite, profile, case set and sample counts, repeat count, warmup setting, and token-count basis, with all cases successful. Legacy suite-v1 reports remain readable. Export JSON preserves measurements and local image references; **Print / Save PDF** opens the browser print dialog with the report and expanded output previews.
+
+### Model downloads
+
+Pulling a model from Setup or Models starts a Studio background job. Switching pages or refreshing reconnects to its saved progress. Only one model download per server runs at a time; repeating the same request returns the existing job. Keep Studio and Ollama running until the download finishes. If Studio restarts mid-download, the saved status explains the interruption; pull again to let Ollama reuse its downloaded data.

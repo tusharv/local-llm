@@ -5,13 +5,14 @@ import { Benchmarks } from "./pages/Benchmarks";
 import { Chat } from "./pages/Chat";
 import { Models } from "./pages/Models";
 import { Setup } from "./pages/Setup";
+import { IconAdjustments, IconMessageCircle, IconCpu, IconChartBar, IconShieldLock, IconServer } from "@tabler/icons-react";
 import "./styles.css";
 
 const PAGES = [
-  { hash: "#/setup", label: "Setup", page: Setup },
-  { hash: "#/chat", label: "Chat", page: Chat },
-  { hash: "#/models", label: "Models", page: Models },
-  { hash: "#/benchmarks", label: "Benchmarks", page: Benchmarks },
+  { hash: "#/setup", label: "Setup", icon: IconAdjustments, page: Setup },
+  { hash: "#/chat", label: "Chat", icon: IconMessageCircle, page: Chat },
+  { hash: "#/models", label: "Models", icon: IconCpu, page: Models },
+  { hash: "#/benchmarks", label: "Benchmarks", icon: IconChartBar, page: Benchmarks },
 ];
 
 function useHash(): string {
@@ -26,8 +27,7 @@ function useHash(): string {
 
 function Shell() {
   const hash = useHash();
-  if (hash === "#/chat") return <Chat />;
-  const current = PAGES.find((item) => item.hash === hash) ?? PAGES[0];
+  const current = PAGES.find((item) => item.hash === hash || (item.hash === "#/chat" && hash.startsWith("#/chat/"))) ?? PAGES[0];
   const Page = current.page;
   const [endpointName, setEndpointName] = useState("No server saved");
 
@@ -57,27 +57,29 @@ function Shell() {
     };
   }, [hash]);
 
+
   return (
     <div className="app">
       <aside className="rail">
         <div className="mark">
-          <strong>Studio</strong>
-          <span>Models on this machine</span>
+          <strong className="studio-wordmark"><img src="/brand/studio-logo-professional.webp" alt="" />Studio<span className="brand-dot">.</span></strong>
+          <span>Your local AI workspace</span>
         </div>
-        <nav>
+        <nav aria-label="Main navigation">
           {PAGES.map((item) => (
             <a key={item.hash} href={item.hash} aria-current={item.hash === current.hash ? "page" : undefined}>
-              {item.label}
+              <item.icon size={20} stroke={1.7} />{item.label}
             </a>
           ))}
         </nav>
+        <div className="rail-note"><IconShieldLock size={22} /><strong>Private by design</strong><p>Conversations are saved on this computer. You choose the server.</p></div>
       </aside>
       <main className="stage">
         <div className="strip">
-          <span><i className="lamp" aria-hidden="true" />127.0.0.1:8000</span>
-          <span>{endpointName}</span>
+          <span><IconShieldLock size={16} /> Local workspace</span>
+          <span><IconServer size={16} /> {endpointName}</span>
         </div>
-        <section className="plate">
+        <section className={`plate${current.hash === "#/chat" ? " chat-plate" : ""}`}>
           <Page />
         </section>
       </main>

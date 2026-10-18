@@ -127,6 +127,8 @@ def iter_pull(
                 except json.JSONDecodeError:
                     continue
                 if isinstance(payload, dict):
+                    if payload.get("error"):
+                        raise EngineError(str(payload["error"]))
                     yield {
                         "status": str(payload.get("status") or ""),
                         "completed": payload.get("completed"),

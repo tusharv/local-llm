@@ -103,3 +103,13 @@ Returns the same payload as `application/json` with a download filename.
 ## Upload URL
 
 `GET /uploads/{filename}` serves a file from `./data/uploads` only. Paths that escape that directory are `404`.
+
+## Benchmark report extension (suite v2, 2026-10-19)
+
+`POST /api/benchmarks` also accepts `profile`: `standard` (default), `code`, or `image`. Unknown profiles return 422. Image runs use the saved endpoint's `/v1/images/generations` route with model, fixed prompt, `n: 1`, `size: "512x512"`, and `response_format: "b64_json"`.
+
+Progress events include `event`: `plan` (run id, case metadata, total), `warmup`, `warmup_complete`, `case_started`, `case_complete` (completed and total counts), `error`, and `finished`. Case failures are preserved and set final run status to `error`; unexpected/warmup errors are also saved on the run.
+
+Run records add `profile`, `expected_results`, and `error`. Result records add `output_text` (up to 32,000 characters), `token_basis` (`tokens`, `chunks`, or unknown), and `image_url` (local upload URL, or null). Kinds now include `code` and `image`.
+
+List responses attach a `summary` to each run. Detail and export responses return `{run, results, summary}`. Summary contains successful/failed/planned counts, median timing, per-case medians, measured duration, token basis, and a comparison key. A null comparison key means the run is incomplete or failed. Medians exclude failed samples. These are performance measurements, not quality scores.

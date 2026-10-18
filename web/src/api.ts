@@ -16,6 +16,7 @@ export type ModelRow = {
 
 export type Conversation = {
   id: number;
+  public_id: string;
   title: string;
   endpoint_id: number;
   model: string;
@@ -71,7 +72,20 @@ export function selectEndpoint(id: number): void {
   window.dispatchEvent(new Event("studio-endpoint"));
 }
 
-export async function api<T>(path: string, init?: RequestInit): Promise<T> {
+// Share overlapping reads (including development StrictMode effects), without
+// caching completed results or suppressing deliberate refreshes.
+const pendingReads = new Map<string, Promise<unknown>>();
+
+export function api<T>(path: string, init?: RequestInit): Promise<T> {
+  if (init) return request<T>(path, init);
+  const pending = pendingReads.get(path);
+  if (pending) return pending as Promise<T>;
+  const next = request<T>(path).finally(() => pendingReads.delete(path));
+  pendingReads.set(path, next);
+  return next;
+}
+
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const headers = new Headers(init?.headers);
   if (init?.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
