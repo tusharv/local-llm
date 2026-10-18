@@ -28,11 +28,11 @@ description: "Task list for Local LLM Studio"
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Create the directory layout in `studio/`, `web/src/pages/`, `tests/unit/`, and `tests/integration/` per `specs/001-local-llm-studio/plan.md`
-- [ ] T002 Add `pyproject.toml` with FastAPI, uvicorn, httpx, and a pytest dev extra, plus `studio/__init__.py` and `studio/__main__.py` that call the app on `127.0.0.1:8000`
-- [ ] T003 [P] Add `web/package.json`, Vite, React, and TypeScript with a dev proxy to `http://127.0.0.1:8000`
-- [ ] T004 [P] Add `.gitignore` for `data/`, `web/node_modules/`, `web/dist/`, and Python caches
-- [ ] T005 [P] Add `LICENSE` as MIT
+- [x] T001 Create the directory layout in `studio/`, `web/src/pages/`, `tests/unit/`, and `tests/integration/` per `specs/001-local-llm-studio/plan.md`
+- [x] T002 Add `pyproject.toml` with FastAPI, uvicorn, httpx, and a pytest dev extra, plus `studio/__init__.py` and `studio/__main__.py` that call the app on `127.0.0.1:8000`
+- [x] T003 [P] Add `web/package.json`, Vite, React, and TypeScript with a dev proxy to `http://127.0.0.1:8000`
+- [x] T004 [P] Add `.gitignore` for `data/`, `web/node_modules/`, `web/dist/`, and Python caches
+- [x] T005 [P] Add `LICENSE` as MIT
 
 ---
 
@@ -42,13 +42,13 @@ description: "Task list for Local LLM Studio"
 
 **Critical**: No user story work begins until this phase is complete
 
-- [ ] T006 Implement `studio/config.py` with `pathlib` data dir `./data`, bind host `127.0.0.1`, and port `8000`
-- [ ] T007 Implement `studio/db.py` creating Endpoint, Conversation, Message, ModelFlag, BenchmarkRun, and BenchmarkResult from `specs/001-local-llm-studio/data-model.md`
-- [ ] T008 [P] Implement `studio/url_policy.py` to normalize a `/v1` base URL, allow loopback, require confirm for private-network hosts, and reject public cloud hosts
-- [ ] T009 [P] Add failing tests in `tests/unit/test_url_policy.py` for loopback accept, private-network confirm, and `https://api.openai.com/v1` reject
-- [ ] T010 Implement `studio/engines/openai_compatible.py` with health, list models, and streaming chat completions, including image data URLs and optional usage chunks
-- [ ] T011 Implement `studio/main.py` app factory, router mount, and startup creation of `./data` and `./data/uploads`
-- [ ] T012 Make `tests/unit/test_url_policy.py` pass
+- [x] T006 Implement `studio/config.py` with `pathlib` data dir `./data`, bind host `127.0.0.1`, and port `8000`
+- [x] T007 Implement `studio/db.py` creating Endpoint, Conversation, Message, ModelFlag, BenchmarkRun, and BenchmarkResult from `specs/001-local-llm-studio/data-model.md`
+- [x] T008 [P] Implement `studio/url_policy.py` to normalize a `/v1` base URL, allow loopback, require confirm for private-network hosts, and reject public cloud hosts
+- [x] T009 [P] Add failing tests in `tests/unit/test_url_policy.py` for loopback accept, private-network confirm, and `https://api.openai.com/v1` reject
+- [x] T010 Implement `studio/engines/openai_compatible.py` with health, list models, and streaming chat completions, including image data URLs and optional usage chunks
+- [x] T011 Implement `studio/main.py` app factory, router mount, and startup creation of `./data` and `./data/uploads`
+- [x] T012 Make `tests/unit/test_url_policy.py` pass
 
 **Checkpoint**: Database and URL rules work without a live model server
 
@@ -62,16 +62,16 @@ description: "Task list for Local LLM Studio"
 
 ### Tests for User Story 6
 
-- [ ] T046 [P] [US6] Add failing tests in `tests/unit/test_onboarding_commands.py` that macOS, Windows, and Linux each get their own Ollama, LM Studio, and llama.cpp install and start text
-- [ ] T047 [P] [US6] Add failing tests in `tests/unit/test_onboarding_flow.py` for running versus stopped versus missing, scripted endpoint choice, no subprocess launch, completion file, browser open, second-run skip, and non-tty skip
+- [x] T046 [P] [US6] Add failing tests in `tests/unit/test_onboarding_commands.py` that macOS, Windows, and Linux each get their own Ollama, LM Studio, and llama.cpp install and start text
+- [x] T047 [P] [US6] Add failing tests in `tests/unit/test_onboarding_flow.py` for running versus stopped versus missing, scripted endpoint choice, no subprocess launch, completion file, browser open, second-run skip, and non-tty skip
 
 ### Implementation for User Story 6
 
-- [ ] T048 [US6] Implement PATH and loopback port detection in `studio/onboarding/detect.py` for Ollama `11434`, LM Studio `1234`, and llama.cpp `8080`
-- [ ] T049 [US6] Implement per-OS command text in `studio/onboarding/commands.py` with no function that runs those commands
-- [ ] T050 [US6] Implement the `input()` menu in `studio/onboarding/flow.py`, including re-probe, skip, and writing `data/onboarding.json` from `specs/001-local-llm-studio/data-model.md`
-- [ ] T051 [US6] Wire `studio/__main__.py` so the first interactive run calls the flow, then serves `127.0.0.1:8000`, then opens that URL with `webbrowser` unless `--no-browser` is set. Honor `--onboard` and `--skip-onboard`. If stdin is not a terminal, serve without prompts and without a browser
-- [ ] T052 [US6] Make T046 and T047 pass
+- [x] T048 [US6] Implement PATH and loopback port detection in `studio/onboarding/detect.py` for Ollama `11434`, LM Studio `1234`, and llama.cpp `8080`
+- [x] T049 [US6] Implement per-OS command text in `studio/onboarding/commands.py` with no function that runs those commands
+- [x] T050 [US6] Implement the `input()` menu in `studio/onboarding/flow.py`, including re-probe, skip, and writing `data/onboarding.json` from `specs/001-local-llm-studio/data-model.md`
+- [x] T051 [US6] Wire `studio/__main__.py` so the first interactive run calls the flow, then serves `127.0.0.1:8000`, then opens that URL with `webbrowser` unless `--no-browser` is set. Honor `--onboard` and `--skip-onboard`. If stdin is not a terminal, serve without prompts and without a browser
+- [x] T052 [US6] Make T046 and T047 pass
 
 **Checkpoint**: A terminal first run reports local runtimes, prints copy-paste commands, and opens Studio. It does not install or start those runtimes
 
@@ -85,17 +85,17 @@ description: "Task list for Local LLM Studio"
 
 ### Tests for User Story 1
 
-- [ ] T013 [P] [US1] Add failing stream-parse tests in `tests/unit/test_openai_stream.py` for time to first token and completion usage
-- [ ] T014 [P] [US1] Add failing chat persistence tests in `tests/integration/test_chat_api.py` for save, reload, cloud URL reject, and delete
+- [x] T013 [P] [US1] Add failing stream-parse tests in `tests/unit/test_openai_stream.py` for time to first token and completion usage
+- [x] T014 [P] [US1] Add failing chat persistence tests in `tests/integration/test_chat_api.py` for save, reload, cloud URL reject, and delete
 
 ### Implementation for User Story 1
 
-- [ ] T015 [US1] Implement endpoint create, list, and delete in `studio/routes/endpoints.py` per `specs/001-local-llm-studio/contracts/http-api.md`
-- [ ] T016 [US1] Implement `GET /api/health` in `studio/routes/health.py`
-- [ ] T017 [US1] Implement conversation create, list, get, and delete in `studio/routes/chat.py`
-- [ ] T018 [US1] Implement `POST /api/chat` SSE in `studio/routes/chat.py`, storing user and assistant messages
-- [ ] T019 [US1] Add `web/src/api.ts` plus `web/src/pages/Chat.tsx` and a minimal endpoint picker that can create the first endpoint
-- [ ] T020 [US1] Make T013 and T014 pass
+- [x] T015 [US1] Implement endpoint create, list, and delete in `studio/routes/endpoints.py` per `specs/001-local-llm-studio/contracts/http-api.md`
+- [x] T016 [US1] Implement `GET /api/health` in `studio/routes/health.py`
+- [x] T017 [US1] Implement conversation create, list, get, and delete in `studio/routes/chat.py`
+- [x] T018 [US1] Implement `POST /api/chat` SSE in `studio/routes/chat.py`, storing user and assistant messages
+- [x] T019 [US1] Add `web/src/api.ts` plus `web/src/pages/Chat.tsx` and a minimal endpoint picker that can create the first endpoint
+- [x] T020 [US1] Make T013 and T014 pass
 
 **Checkpoint**: User Story 1 works on its own. A person can chat with a mocked or live local `/v1` server and refresh without losing the transcript
 
@@ -109,15 +109,15 @@ description: "Task list for Local LLM Studio"
 
 ### Tests for User Story 2
 
-- [ ] T021 [P] [US2] Add failing tests in `tests/unit/test_ollama_capabilities.py` for vision capabilities, family-name fallback, and missing capabilities
-- [ ] T022 [P] [US2] Add failing tests in `tests/integration/test_models_api.py` that pull and delete return 400 for kind `openai`
+- [x] T021 [P] [US2] Add failing tests in `tests/unit/test_ollama_capabilities.py` for vision capabilities, family-name fallback, and missing capabilities
+- [x] T022 [P] [US2] Add failing tests in `tests/integration/test_models_api.py` that pull and delete return 400 for kind `openai`
 
 ### Implementation for User Story 2
 
-- [ ] T023 [US2] Implement `studio/engines/ollama.py` for `/api/show`, streamed `/api/pull`, and `/api/delete`
-- [ ] T024 [US2] Implement `GET /api/models`, `PUT /api/models/flags`, pull SSE, and delete in `studio/routes/models.py`
-- [ ] T025 [US2] Add `web/src/pages/Models.tsx` with the list, vision override, and Ollama-only pull and delete
-- [ ] T026 [US2] Make T021 and T022 pass
+- [x] T023 [US2] Implement `studio/engines/ollama.py` for `/api/show`, streamed `/api/pull`, and `/api/delete`
+- [x] T024 [US2] Implement `GET /api/models`, `PUT /api/models/flags`, pull SSE, and delete in `studio/routes/models.py`
+- [x] T025 [US2] Add `web/src/pages/Models.tsx` with the list, vision override, and Ollama-only pull and delete
+- [x] T026 [US2] Make T021 and T022 pass
 
 **Checkpoint**: Model list and Ollama management work without the vision-check or benchmark pages
 
@@ -131,15 +131,15 @@ description: "Task list for Local LLM Studio"
 
 ### Tests for User Story 3
 
-- [ ] T027 [P] [US3] Add failing tests in `tests/integration/test_vision.py` for image store, text-model rejection, probe cache, and file cleanup on delete
+- [x] T027 [P] [US3] Add failing tests in `tests/integration/test_vision.py` for image store, text-model rejection, probe cache, and file cleanup on delete
 
 ### Implementation for User Story 3
 
-- [ ] T028 [US3] Add the bundled shapes image at `studio/assets/vision-check.png` and a fixed question constant next to it
-- [ ] T029 [US3] Extend `POST /api/chat` to accept an image only when the effective vision flag is true, and serve files from `./data/uploads` without path escape
-- [ ] T030 [US3] Implement `POST /api/vision-check` in `studio/routes/models.py` and update ModelFlag.probe_result
-- [ ] T031 [US3] Add image attach and the vision-check action in `web/src/pages/Chat.tsx` and `web/src/pages/Models.tsx`
-- [ ] T032 [US3] Make T027 pass
+- [x] T028 [US3] Add the bundled shapes image at `studio/assets/vision-check.png` and a fixed question constant next to it
+- [x] T029 [US3] Extend `POST /api/chat` to accept an image only when the effective vision flag is true, and serve files from `./data/uploads` without path escape
+- [x] T030 [US3] Implement `POST /api/vision-check` in `studio/routes/models.py` and update ModelFlag.probe_result
+- [x] T031 [US3] Add image attach and the vision-check action in `web/src/pages/Chat.tsx` and `web/src/pages/Models.tsx`
+- [x] T032 [US3] Make T027 pass
 
 **Checkpoint**: Image chat and the vision check work against a mock, and cleanup is covered
 
@@ -153,16 +153,16 @@ description: "Task list for Local LLM Studio"
 
 ### Tests for User Story 4
 
-- [ ] T033 [P] [US4] Add failing tests in `tests/unit/test_benchmark_math.py` for time to first token, usage-based tokens per second, and chunk-count fallback
-- [ ] T034 [P] [US4] Add failing tests in `tests/integration/test_benchmarks_api.py` for a full run, 409 while running, comparison payload, and JSON export
+- [x] T033 [P] [US4] Add failing tests in `tests/unit/test_benchmark_math.py` for time to first token, usage-based tokens per second, and chunk-count fallback
+- [x] T034 [P] [US4] Add failing tests in `tests/integration/test_benchmarks_api.py` for a full run, 409 while running, comparison payload, and JSON export
 
 ### Implementation for User Story 4
 
-- [ ] T035 [US4] Implement the text and vision cases and `suite_version` in `studio/benchmarks/suite.py`
-- [ ] T036 [US4] Implement the sequential runner, optional warmup, and repeat count in `studio/benchmarks/runner.py`
-- [ ] T037 [US4] Implement start, list, get, and export in `studio/routes/benchmarks.py` per the contract
-- [ ] T038 [US4] Add `web/src/pages/Benchmarks.tsx` with run progress, history, same-suite comparison, export, and the single-user speed explanation
-- [ ] T039 [US4] Make T033 and T034 pass
+- [x] T035 [US4] Implement the text and vision cases and `suite_version` in `studio/benchmarks/suite.py`
+- [x] T036 [US4] Implement the sequential runner, optional warmup, and repeat count in `studio/benchmarks/runner.py`
+- [x] T037 [US4] Implement start, list, get, and export in `studio/routes/benchmarks.py` per the contract
+- [x] T038 [US4] Add `web/src/pages/Benchmarks.tsx` with run progress, history, same-suite comparison, export, and the single-user speed explanation
+- [x] T039 [US4] Make T033 and T034 pass
 
 **Checkpoint**: Benchmark history is useful even if the setup guide is still a stub
 
@@ -176,9 +176,9 @@ description: "Task list for Local LLM Studio"
 
 ### Implementation for User Story 5
 
-- [ ] T040 [US5] Add `web/src/pages/Setup.tsx` for endpoint create, health, model count, Ollama pull when kind is `ollama`, and the localhost-versus-`127.0.0.1` hint
-- [ ] T041 [US5] Serve `web/dist` from `studio/main.py` when that directory exists
-- [ ] T042 [US5] Write `README.md` with the same Studio install on all three operating systems, per-OS install steps for Ollama, LM Studio, and llama.cpp, RAM examples, troubleshooting, and the privacy rules from `.specify/memory/constitution.md`
+- [x] T040 [US5] Add `web/src/pages/Setup.tsx` for endpoint create, health, model count, Ollama pull when kind is `ollama`, and the localhost-versus-`127.0.0.1` hint
+- [x] T041 [US5] Serve `web/dist` from `studio/main.py` when that directory exists
+- [x] T042 [US5] Write `README.md` with the same Studio install on all three operating systems, per-OS install steps for Ollama, LM Studio, and llama.cpp, RAM examples, troubleshooting, and the privacy rules from `.specify/memory/constitution.md`
 
 **Checkpoint**: The quickstart in `specs/001-local-llm-studio/quickstart.md` can be followed from the README
 
@@ -188,9 +188,9 @@ description: "Task list for Local LLM Studio"
 
 **Purpose**: CI and a full local test run
 
-- [ ] T043 [P] Add `.github/workflows/test.yml` running `pytest` on `ubuntu-latest`, `windows-latest`, and `macos-latest`
-- [ ] T044 Run `pytest` locally and fix failures in the tests or studio code they cover
-- [ ] T045 Walk `specs/001-local-llm-studio/quickstart.md` on this Mac against Ollama if the daemon can be started, and record any doc mismatch in `README.md`
+- [x] T043 [P] Add `.github/workflows/test.yml` running `pytest` on `ubuntu-latest`, `windows-latest`, and `macos-latest`
+- [x] T044 Run `pytest` locally and fix failures in the tests or studio code they cover
+- [x] T045 Walk `specs/001-local-llm-studio/quickstart.md` on this Mac against Ollama if the daemon can be started, and record any doc mismatch in `README.md`
 
 ---
 
