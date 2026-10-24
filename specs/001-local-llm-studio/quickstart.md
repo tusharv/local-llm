@@ -17,6 +17,7 @@ Useful flags:
 - `--onboard` runs the questions again
 - `--skip-onboard` starts the server without questions
 - `--no-browser` starts the server without opening a browser
+- `--dev` starts the API and the Vite dev server together
 
 A non-interactive process does not wait and does not open a browser.
 
@@ -35,18 +36,13 @@ python -m studio
 
 Open `http://127.0.0.1:8000`. Do not use `localhost` as the documented address.
 
-Dev loop, two processes:
+Dev loop, one command from the repository root:
 
 ```text
-python -m studio
+python -m studio --dev
 ```
 
-```text
-cd web
-npm run dev
-```
-
-Vite serves the UI and proxies `/api` to `127.0.0.1:8000`.
+The API listens on `http://127.0.0.1:8000`. Vite serves the UI on `http://127.0.0.1:5173` and proxies `/api` to the API. Ctrl+C stops both. `--dev` skips the first-run questions.
 
 ## Connect a runtime
 

@@ -21,24 +21,20 @@ python -m studio
 
 Open `http://127.0.0.1:8000`. Do not use `localhost` as the address. On Windows, `localhost` often resolves to IPv6 while Studio listens on IPv4.
 
-While developing the UI, run Studio in one terminal and the Vite dev server in another:
+While developing the UI, start the API and Vite together:
 
 ```text
-python -m studio
+python -m studio --dev
 ```
 
-```text
-cd web
-npm run dev
-```
-
-Vite proxies `/api` to `127.0.0.1:8000`.
+The API listens on `http://127.0.0.1:8000`. Vite serves the UI on `http://127.0.0.1:5173` and proxies `/api` to the API. Ctrl+C stops both. `--dev` skips the first-run questions.
 
 Useful flags:
 
 - `python -m studio --onboard` runs the first-run questions again
 - `python -m studio --skip-onboard` starts the server once without the questions
 - `python -m studio --no-browser` starts the server without opening a browser
+- `python -m studio --dev --no-browser` starts the API and Vite without opening a page
 
 If stdin is not a terminal, Studio does not wait for input and does not open a browser.
 
