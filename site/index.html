@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Local LLM Studio | Your models. Your workspace.</title>
+    <meta
+      name="description"
+      content="A private place to chat with a model on your own computer, see which models can look at pictures, and compare how fast they answer."
+    />
+    <meta name="theme-color" content="#293c44" />
+    <link rel="canonical" href="https://tusharv.github.io/local-llm/" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./brand/favicon-32-v3.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Local LLM Studio" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://tusharv.github.io/local-llm/" />
+    <meta property="og:title" content="Local LLM Studio | Your models. Your workspace." />
+    <meta
+      property="og:description"
+      content="Chat with a model on your own computer, see which models can look at pictures, and compare how fast they answer."
+    />
+    <meta property="og:image" content="https://tusharv.github.io/local-llm/brand/og-image-v2.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Local LLM Studio. Your models. Your workspace. Chat, pictures, and speed."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Local LLM Studio | Your models. Your workspace." />
+    <meta
+      name="twitter:description"
+      content="Chat with a model on your own computer, see which models can look at pictures, and compare how fast they answer."
+    />
+    <meta name="twitter:image" content="https://tusharv.github.io/local-llm/brand/og-image-v2.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Local LLM Studio. Your models. Your workspace. Chat, pictures, and speed."
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap header-bar">
+        <a class="brand" href="#top">
+          <img
+            src="./brand/studio-logo-professional.webp"
+            width="256"
+            height="256"
+            alt=""
+          />
+          <span>Local LLM Studio</span>
+        </a>
+        <nav class="site-nav" aria-label="Page">
+          <a href="#gap">Why</a>
+          <a href="#starting">Starting out</a>
+          <a href="#running">Already set up</a>
+          <a href="#start">Start</a>
+          <a href="https://github.com/tusharv/local-llm">GitHub</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="wrap hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">A private place for your models</p>
+            <h1 id="hero-title">Your models.<br />Your workspace.</h1>
+            <p class="lede">
+              Studio is a private place to use a model that runs on your own computer. You can chat, see which models you have, check which ones can look at pictures, and time how fast they answer.
+            </p>
+            <p class="lede">
+              It works with Ollama, LM Studio, llama.cpp, and other apps that run models on your machine.
+            </p>
+            <div class="actions">
+              <a class="button primary" href="https://github.com/tusharv/local-llm#install-studio">See how to install</a>
+              <a class="button secondary" href="#gap">Why it exists</a>
+            </div>
+          </div>
+          <figure class="hero-art">
+            <img
+              src="./brand/workspace-background.webp"
+              width="1536"
+              height="1024"
+              alt=""
+            />
+          </figure>
+        </div>
+      </section>
+
+      <section class="gap" id="gap" aria-labelledby="gap-title">
+        <div class="wrap">
+          <p class="eyebrow light">The gap</p>
+          <h2 id="gap-title">Running a model is only the first step.</h2>
+          <p class="gap-lead">
+            Ollama, LM Studio, and llama.cpp can already run a model. Studio does not replace them. It does not install them or turn them on. The first time you open Studio, it prints the steps for your computer. You follow those steps yourself.
+          </p>
+          <p class="gap-lead">What is still left after the model app is installed:</p>
+          <ul class="gap-list">
+            <li>Choose an app and find the address it uses.</li>
+            <li>Keep your chats in a folder you can see.</li>
+            <li>Know which models can look at pictures.</li>
+            <li>See how fast a model is on your computer.</li>
+            <li>Keep a cloud address from being saved as if it were on your machine.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="band" id="starting" aria-labelledby="starting-title">
+        <div class="wrap">
+          <p class="eyebrow">Starting from zero</p>
+          <h2 id="starting-title">You want a model on your computer, and you have not set one up yet.</h2>
+          <p class="section-lead">
+            Each problem below is paired with what Studio does about it.
+          </p>
+          <div class="pairs">
+            <article class="pair">
+              <div class="snag">
+                <h3>Three apps, one job.</h3>
+                <p>
+                  Ollama, LM Studio, and llama.cpp all run models. Each one installs differently and uses a different address. Picking one can feel permanent.
+                </p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                The first run names those three. It prints the install and start steps for your computer only. It does not run those steps.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>The first step is hard to find.</h3>
+                <p>Guides jump to downloading a model before saying the app has to be running.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It checks each app and says whether it is installed, running, stopped, or missing. Then it prints the next step.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>Will it fit on this computer?</h3>
+                <p>A very large model will not fit on a laptop, and most guides never say what will.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                About 8 GB of memory is enough for a small model. About 16 GB is enough for a mid-size model plus a small one that can look at pictures. These are examples, not a model to go buy.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>“On my computer” is unclear.</h3>
+                <p>You cannot tell whether a chat left your computer.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It stays on your computer. Chats, pictures, and speed tests are saved in a folder named data. There is no account, and nothing is sent back to us.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>The page will not open.</h3>
+                <p>
+                  On Windows, typing <code>localhost</code> often opens the wrong address, so the first page looks broken.
+                </p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                Open <code>http://127.0.0.1:8000</code>. That address means this computer. Skip <code>localhost</code>.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A picture fails, and the page does not say why.</h3>
+                <p>Sending a picture to a model that only reads text fails with no explanation.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It marks the models that can look at pictures. If a model cannot, the button to attach a picture stays hidden.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A setup that acts on its own.</h3>
+                <p>
+                  A first-run tool that installs software, or downloads a huge model, is a reason to close the window.
+                </p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It never installs or starts those apps. It downloads a model only when you ask, and only for Ollama.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A different next step every time.</h3>
+                <p>After you install an app, each one has its own chat screen.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                Once any of those apps is running, Studio is the same place to work.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="band band-quiet" id="running" aria-labelledby="running-title">
+        <div class="wrap">
+          <p class="eyebrow">Already set up</p>
+          <h2 id="running-title">You already run a model, or you want one private place for more than one app.</h2>
+          <p class="section-lead">
+            Getting the model running was the first hurdle. Comparing models, keeping chats, and trusting the numbers are still hard.
+          </p>
+          <div class="pairs">
+            <article class="pair">
+              <div class="snag">
+                <h3>A different screen for every app.</h3>
+                <p>Ollama, LM Studio, and llama.cpp do not share chats.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                One Studio install can talk to any of them. Older chats stay on your computer when you switch models.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>Speed numbers from someone else’s computer.</h3>
+                <p>A public ranking does not say how fast a model is on your computer, or how long you wait before the first words.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It times one model at a time, on the app you saved. It leaves out a practice run by default. You can run the test once, or three times.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>Faster gets treated as better.</h3>
+                <p>A quicker reply gets read as a better answer.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                The numbers are how fast this model answered on your computer. A finished run means a reply came back. It does not mean the writing or the picture is correct.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A list of names, and nothing else.</h3>
+                <p>The model list is a set of names. It does not say which ones can look at pictures.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                You can download or remove a model only with Ollama. For the other apps, load the model there, then refresh. Studio marks which models can look at pictures.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A download that seems to vanish.</h3>
+                <p>A model can take a long time to download. Leaving the page looks like it stopped.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                A download keeps going in the background. Switching pages or refreshing shows the same progress. Only one download runs at a time.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>The model is on another computer.</h3>
+                <p>At home or at work, the model may be on a different computer. Saving that address should be a choice you make on purpose.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                An address on this computer is saved right away. An address on another computer on your network is saved only after you confirm. The page says your messages will go there.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A cloud address pasted into a local app.</h3>
+                <p>It is easy to paste a cloud address into a box that says “on this computer.”</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                Saving the OpenAI website address is refused. The list you already saved stays as it was.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>Chats trapped inside an app.</h3>
+                <p>Chats buried inside an app are hard to back up or delete.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                Chats and pictures are files in a data folder on your computer. Deleting a chat deletes its pictures.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>Comparisons that mix different tests.</h3>
+                <p>Different questions, a slow first try, or an older test make the table misleading.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                It compares two runs only when they used the same test, the same settings, and every question succeeded. Older tests can still be opened. They are not placed side by side.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A test that does more than you asked.</h3>
+                <p>Sample code should not run by itself, and a picture link should not be opened for you.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                Code is shown as text. It is never run. Pictures are made only by a picture app you already saved on your own network. Studio does not open picture links.
+              </p>
+            </article>
+            <article class="pair">
+              <div class="snag">
+                <h3>A sign-in for a model you already have.</h3>
+                <p>A sign-in stands between you and a model that is already on your computer.</p>
+              </div>
+              <p class="does">
+                <span class="does-label">Studio</span>
+                There is no sign-in, and Studio does not report how you use it.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="band" id="get" aria-labelledby="get-title">
+        <div class="wrap">
+          <p class="eyebrow">What you get</p>
+          <h2 id="get-title">Four pages, once the model app is yours.</h2>
+          <div class="cards">
+            <article class="card">
+              <h3>Setup</h3>
+              <p>
+                Shows whether your model app is answering, how many models it has, and a download box for Ollama. If the app is stopped, the page stays up and shows the address to use. Start the app, then refresh.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Chat</h3>
+              <p>
+                The reply appears as it is written. The same chat is still there after you refresh. You can attach a picture only when the model can look at pictures. Deleting a chat deletes its pictures.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Models</h3>
+              <p>
+                Lists the models on the app you saved, and marks which ones can look at pictures. Downloading and removing models is for Ollama only.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Speed</h3>
+              <p>
+                Times one model at a time. A practice run is left out by default. You can repeat the test once or three times. You see how long the first words take, and how fast the rest of the reply comes in. That is speed on your computer, not a score for how good the answer is.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="limits" id="limits" aria-labelledby="limits-title">
+        <div class="wrap limits-grid">
+          <div>
+            <p class="eyebrow light">Boundaries</p>
+            <h2 id="limits-title">What it will not do.</h2>
+          </div>
+          <ul class="limit-list">
+            <li>It does not install or start Ollama, LM Studio, or llama.cpp.</li>
+            <li>It will not save a public cloud address, such as the OpenAI website.</li>
+            <li>An address on another computer is saved only after you confirm, because your messages then leave this machine.</li>
+            <li>A model app on your computer can still send work to the cloud. Studio cannot promise that every model stays on the machine.</li>
+            <li>The speed test is not a score for how good an answer is.</li>
+            <li>Sample code is not run. Picture links are not opened.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="band" id="start" aria-labelledby="start-title">
+        <div class="wrap start-grid">
+          <div>
+            <p class="eyebrow">Start</p>
+            <h2 id="start-title">Connect Studio to an app you already started.</h2>
+            <p class="section-lead">
+              You need Python 3.11 or newer and Node.js 20 or newer. The install steps for Mac, Windows, and Linux are in the guide. Studio will not run them for you.
+            </p>
+            <p>Then run:</p>
+            <pre><code>python -m studio</code></pre>
+            <p>
+              Open <a href="http://127.0.0.1:8000"><code>http://127.0.0.1:8000</code></a> in your browser. That address means this computer. Skip <code>localhost</code>.
+            </p>
+            <p>
+              <a class="text-link" href="https://github.com/tusharv/local-llm#install-studio">Install steps in the guide</a>
+            </p>
+          </div>
+          <div>
+            <h3 class="preset-title">Usual addresses</h3>
+            <ul class="presets">
+              <li>
+                <span>Ollama</span>
+                <code>http://127.0.0.1:11434/v1</code>
+              </li>
+              <li>
+                <span>LM Studio</span>
+                <code>http://127.0.0.1:1234/v1</code>
+              </li>
+              <li>
+                <span>llama.cpp</span>
+                <code>http://127.0.0.1:8080/v1</code>
+              </li>
+            </ul>
+            <p class="preset-note">
+              Any other app that runs models on your computer uses the address that app shows you. Keep the <code>/v1</code> at the end of the address. Load the model in that app, then refresh Models.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-bar">
+        <p>Local LLM Studio. MIT license.</p>
+        <p>
+          <a href="https://github.com/tusharv/local-llm">github.com/tusharv/local-llm</a>
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

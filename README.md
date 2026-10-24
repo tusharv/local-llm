@@ -6,6 +6,8 @@ Studio binds to `127.0.0.1:8000`. Chats, images, and benchmark rows stay in `./d
 
 The same Studio install is used on macOS, Windows, and Linux.
 
+A plain explanation of why Studio exists, and who it is for, is at https://tusharv.github.io/local-llm/.
+
 ## Install Studio
 
 You need Python 3.11 or newer and Node.js 20 or newer.
